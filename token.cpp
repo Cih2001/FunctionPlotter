@@ -14,6 +14,11 @@ bool Token::isOperand()
 }
 
 Operator::Operator() {}
+
+OperatorPrecedence Operator::getPrecedence()
+{
+    return _precedence;
+}
 Operator::~Operator() {}
 
 

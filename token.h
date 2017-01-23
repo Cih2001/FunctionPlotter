@@ -3,7 +3,7 @@
 
 #include <QString>
 
-enum class OperatorPrecedence {
+enum OperatorPrecedence {
     Functions = 0 ,
     UnaryOperations = 1,
     Power = 2,
@@ -18,6 +18,7 @@ enum class TokenType {
     BinaryOperator = 0x10,
     Varibale = 0x20
 };
+
 
 class Token
 {
@@ -38,6 +39,8 @@ class Operator : public Token
 public:
     Operator();
     virtual ~Operator() = 0;
+
+    OperatorPrecedence getPrecedence();
 protected:
     OperatorPrecedence _precedence;
 };

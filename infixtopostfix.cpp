@@ -46,7 +46,7 @@ Tokens InfixToPostfix::convert()
                  */
 
                 while (operators_stack.top()->getType() != TokenType::LeftParenthesis &&
-                       (uint)operators_stack.top()->getType() <= (uint)token->getType())
+                       (uint)operators_stack.top()->getPrecedence() <= (uint)std::dynamic_pointer_cast<Operator>(token)->getPrecedence())
                 {
                     result.append(operators_stack.pop());
                     if (operators_stack.isEmpty()) break;
