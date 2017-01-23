@@ -74,3 +74,23 @@ A stack is again the data structure of choice. However, as you scan the postfix 
 
 The figure below shows the steps of evaluating 4 5 6 \* + ( which is  4 + 5 \* 6 = 34)
 ![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/evalpostfix1.png?raw=true "Postfix Evaluation")
+
+### The Design Patterns
+
+#### SRP
+
+#### OCP
+
+#### How to extend program by adding a custom operator
+
+## Source code explanation
+
+## Improvements
+
+### Improve the quality of the code
+
+### Implement an interface for Scanner
+
+### Add a syntax checker to scanner
+
+## Future plan
