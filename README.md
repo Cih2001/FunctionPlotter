@@ -1,6 +1,6 @@
 # FunctionPlotter
 
-Function Plotter is a simple C++ (Qt) program which takes a mathematical function definition "f(x)" as it's input and illustrates it on a two-dimensional graph (x-y). The figure in below, show the program in runtime.
+Function Plotter is a simple C++ (Qt) program which takes a mathematical function definition "f(x)" as it's input and illustrates it on a two-dimensional graph (x-y). The figure in below, shows the program in runtime.
 
 ![Fig.1](/linux_64bit-Release/Screenshot from 2017-01-23 17-37-24.png?raw=true "Screenshot 1")
 
