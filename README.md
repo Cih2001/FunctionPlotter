@@ -46,7 +46,7 @@ The extensive explanation can be found [here](http://interactivepython.org/runes
 For example, The converted version of A + B \* C (as it is illustrated below) is A B C \* +
 ![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/moveright.png?raw=true "Infix to Postfix ad hoc method")
 
-But the algorithmic way to perform the conversion using the stack includes these steps:
+But the algorithmic way to perform the conversion using the operators stack includes these steps:
 (Parsing tokens from start to end)
 
 1. If current token is an Operand -> add it to output
@@ -54,9 +54,23 @@ But the algorithmic way to perform the conversion using the stack includes these
 3. If current token is Right Parenthesis -> pop the stack until corresponding Left Parenthesis, add each token to output
 4. If current token is an Operator ->
   - if it has less or equal precedence compared to the operator on the top of the stack  -> pop the token from the stack and add it to output, then push the current privileged one into stack.
-   - if it has higher precedence compared to the operator on the top of the stack -> push it into the stack
+   - if it has higher precedence compared to the operator on the top of the stack or the stack is empty -> push it into the stack
 5. Do above steps for all tokens (from left to right) until it finishes
 6. If the input string is finished (all tokens are parsed) -> pop the remaining operators in the stack and add them to output.
 
 The figure below shows the steps of converting A \* B + C \* D into A B \* C D \* +
 ![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/intopost.png?raw=true "Infix to Postfix using stack")
+
+#### Postfix Evaluation
+
+A stack is again the data structure of choice. However, as you scan the postfix expression, it is the operands that must wait, not the operators as in the conversion algorithm above. The algorithm is simple (parsing the Postfix expression from left to right):
+
+1. whenever an operand is seen on the input -> push it into stack
+2. whenever an operator is seen on the input ->
+  - if it's a binary operator -> pop the stack two times and apply the operator on them, push the result back into the stack 
+  - if it's an unary operator -> pop the stack, apply the operator on it and push the result back into the stack.
+3. Do above steps for all tokens (from left to right) until it finishes
+4. The should be a sole result of the evaluation remained in the stack.
+
+The figure below shows the steps of evaluating 4 5 6 \* + ( which is  4 + 5 \* 6 = 34)
+![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/evalpostfix1.png?raw=true "Postfix Evaluation")
