@@ -11,11 +11,11 @@ class InfixToPostfix
 {
 private:
     QString _input_string = "";
-
+    Tokens& _input_tokens;
 public:
     InfixToPostfix() = delete;
-    InfixToPostfix(const QString& input_string)
-        : _input_string(input_string) {}
+    InfixToPostfix(Tokens& infix_tokens)
+        : _input_tokens(infix_tokens) {}
 
     Tokens convert();
 

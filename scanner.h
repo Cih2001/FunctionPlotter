@@ -21,7 +21,6 @@ public:
         _input_string = input_string;
     }
 
-
     Tokens scan();
 
 };
