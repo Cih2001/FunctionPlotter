@@ -77,7 +77,34 @@ The figure below shows the steps of evaluating 4 5 6 \* + ( which is  4 + 5 \* 6
 
 ### The Design Patterns
 
+As it is explained, this application is composed of three major parts. Scanner, Infix to Postfix Converter and Postfix Evaluator. In regards to SRP (Single Responsibility Pattern) we implement each part into a separate class. For the sake of OCP (Open Closed Principle), we design the program in a way that adding new operators doesn't force any change or modification in these classes.
+
 #### SRP
+
+```c++
+typedef QList<std::shared_ptr<Token>> Tokens;
+class Scanner
+{
+  ...
+public:
+    Tokens scan();
+};
+class InfixToPostfix
+{
+  ...
+public:
+    Tokens convert();
+};
+class FunctionEvaluator
+{
+...
+public:
+    double evaluate();
+    double evaluate(QString input_string);
+    bool updateVariableValue(QString variable_name,
+                             double value);
+};
+```
 
 #### OCP
 
