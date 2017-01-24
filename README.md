@@ -6,7 +6,7 @@ Function Plotter is a simple C++ (Qt) program which takes a mathematical functio
 
 ## Purpose of the project
 
-Imagine that you're writing an industrial program to control a universal testing machine, which one of it's functions is to compress metals and measure the force throughout the experiment. Let's assume that a client comes to you and asks for computing the pressure from the formula 'P=F/A'. Easy peasy! We can implement this equation in our program in the blink of an eye. but what if other customers require different formulas? What happens if someone asks you to allow him to enter his formula dynamically into the application in runtime, while there can be countless equations defined? Well, to cope with situations like these (when you don't know the mathematical function definition at compile time), you will need a Function Evaluation Algorithm.
+Imagine that you're developing an industrial program to control a universal testing machine, which one of it's functions is to compress metals and measure the force throughout the experiment. Let's assume that a client comes to you and asks for computing the pressure from the formula 'P=F/A'. Easy peasy! We can implement this equation in our program in the blink of an eye. but what if other customers require different formulas? What happens if someone asks you to allow him to enter his formula dynamically into the application in runtime, while there can be countless equations defined? Well, to cope with situations like these (when you don't know the mathematical function definition at compile time), you will need a Function Evaluation Algorithm.
 
 There exist a vast collection of function assessment algorithms. The most simple and trivial one which is also the basis of our program is explained expressively in [here](http://interactivepython.org/runestone/static/pythonds/BasicDS/InfixPrefixandPostfixExpressions.html). We will also explain it in a quick way.
 
@@ -80,33 +80,34 @@ The figure below shows the steps of evaluating 4 5 6 \* + ( which is  4 + 5 \* 6
 As it is explained, this application is composed of three major parts. Scanner, Infix to Postfix Converter and Postfix Evaluator. In regards to SRP (Single Responsibility Pattern) we implement each part into a separate class. For the sake of OCP (Open Closed Principle), we design the program in a way that adding new operators doesn't force any change or modification in these classes.
 
 #### SRP
-
+For each phase of the algorithm, a separated class is defined like below and each class has a sole unique responsibility.
 ```c++
 typedef QList<std::shared_ptr<Token>> Tokens;
 class Scanner
 {
   ...
 public:
+    Scanner(QString input_string);
     Tokens scan();
 };
 class InfixToPostfix
 {
   ...
 public:
+    InfixToPostfix(Tokens& infix_tokens);
     Tokens convert();
 };
 class FunctionEvaluator
 {
 ...
 public:
-    double evaluate();
-    double evaluate(QString input_string);
-    bool updateVariableValue(QString variable_name,
-                             double value);
+    FunctionEvaluator(Tokens& postfix_tokens)
+    double evaluate(const QList<QPair<QString,double>>& variables_list);
 };
 ```
-
 #### OCP
+
+The reaffirmation of extending operands and respecting OCP is the tricky part. Defining new operators is simply manageable. however, the scanner class should know about newly defined operators, same as postfix evaluator and convertor classes. So they should be modified each time we wanted to add a new operator. This fact leaves our design Open to Modifications, which is terrible! OCP says that software entities should be open for extension but closed for modification.
 
 #### How to extend program by adding a custom operator
 
