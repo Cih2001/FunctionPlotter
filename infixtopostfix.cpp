@@ -1,5 +1,4 @@
 #include "infixtopostfix.h"
-#include "scanner.h"
 #include <QStack>
 #include <QMessageBox>
 
@@ -8,9 +7,8 @@ Tokens InfixToPostfix::convert()
     Tokens result;
     QStack<std::shared_ptr<Operator>> operators_stack;
 
-    Scanner scanner(this->_input_string);
+    auto tokens = this->_input_tokens;
 
-    auto tokens = scanner.scan();
     for (auto token : tokens)
     {
         if (token->isOperand())

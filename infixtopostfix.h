@@ -10,7 +10,6 @@ typedef QList<std::shared_ptr<Token>> Tokens;
 class InfixToPostfix
 {
 private:
-    QString _input_string = "";
     Tokens& _input_tokens;
 public:
     InfixToPostfix() = delete;

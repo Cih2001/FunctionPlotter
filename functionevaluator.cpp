@@ -1,6 +1,5 @@
 #include "compilesettings.h"
 #include "functionevaluator.h"
-#include "infixtopostfix.h"
 #include "token.h"
 #include "operators.h"
 #include <QMessageBox>
@@ -29,42 +28,37 @@ double FunctionEvaluator::getVariableValue(QString variable_name)
     return 0;
 }
 
-FunctionEvaluator::FunctionEvaluator()
-{
-    _input_string = "";
-    values.clear();
-}
-
-FunctionEvaluator::FunctionEvaluator(QString input_string,
-                                     const QList<QPair<QString, double> > &varibales_list)
+void FunctionEvaluator::updateVariables(const QList<QPair<QString, double> > &variables_list)
 {
     values.clear();
-    _input_string = input_string;
 
-    if (varibales_list.empty()) return;
+    if (variables_list.empty()) return;
 
-    for (auto pair : varibales_list)
+    for (auto pair : variables_list)
     {
         values.append(pair);
     }
 }
 
-double FunctionEvaluator::evaluate()
+
+double FunctionEvaluator::evaluate(const QList<QPair<QString,double>>& variables_list)
 {
-    if (_input_string == "")
+    if (this->_postfix_tokens.isEmpty())
     {
         //TODO: we need to raise an error
         return 0;
     }
+    updateVariables(variables_list);
 
-    InfixToPostfix infix_to_postfix(_input_string);
     QStack<double> evaluation_stack;
-    auto post_fix_expression = infix_to_postfix.convert();
+
+    auto post_fix_expression = this->_postfix_tokens;
+
     for (auto token : post_fix_expression)
     {
         if (token->getType() == TokenType::Literal)
         {
-            std::shared_ptr<Literal<double>> literal_token= std::dynamic_pointer_cast<Literal<double>>(token);
+            std::shared_ptr<Literal<double>> literal_token = std::dynamic_pointer_cast<Literal<double>>(token);
             evaluation_stack.push(literal_token->getValue());
         }
         else if (token->getType() == TokenType::Varibale)
@@ -87,8 +81,8 @@ double FunctionEvaluator::evaluate()
         {
             if (evaluation_stack.size() < 2)
             {
-                //TODO: there should be an error with the input_string
-                //If the input_string was correct, this situation couldn't have happened.
+                //TODO: there should be an error with the postfix expression
+                //If the postfix expression was correct, this situation couldn't have happened.
                 #if DEBUG_ENABLED <= 2
                 QMessageBox::critical(nullptr,"Function Evaluator","Not enough values in the stack");
                 #endif
@@ -105,8 +99,8 @@ double FunctionEvaluator::evaluate()
         {
             if (evaluation_stack.isEmpty())
             {
-                //TODO: there should be an error with the input_string
-                //If the input_string was correct, this situation couldn't have happened.
+                //TODO: there should be an error with the postfix expression
+                //If the postfix expression was correct, this situation couldn't have happened.
                 #if DEBUG_ENABLED <= 2
                 QMessageBox::critical(nullptr,"Function Evaluator","Not enough values in the stack");
                 #endif
@@ -129,33 +123,11 @@ double FunctionEvaluator::evaluate()
     if (evaluation_stack.size() == 1) return evaluation_stack.top();
     else
     {
-        //TODO: there should be an error with the input_string
-        //If the input_string was correct, this situation couldn't have happened.
+        //TODO: there should be an error with the postfix expression
+        //If the postfix expression was correct, this situation couldn't have happened.
         #if DEBUG_ENABLED <= 2
         QMessageBox::critical(nullptr,"Function Evaluator","Some error happend");
         #endif
         return 0;
     }
-}
-
-double FunctionEvaluator::evaluate(QString input_string)
-{
-    _input_string = input_string;
-    return evaluate();
-}
-
-bool FunctionEvaluator::updateVariableValue(QString variable_name, double value)
-{
-    if (isUnknownVariable(variable_name)) return false;
-
-    QListIterator<QPair<QString,double>> i(values);
-
-    for (int i = 0; i < values.size(); i++)
-        if (values[i].first == variable_name)
-        {
-            values[i].second = value;
-            return true;
-        }
-
-    return false;
 }
