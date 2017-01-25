@@ -107,9 +107,78 @@ public:
 ```
 #### OCP
 
-The reaffirmation of extending operands and respecting OCP is the tricky part. Defining new operators is simply manageable. however, the scanner class should know about newly defined operators, same as postfix evaluator and convertor classes. So they should be modified each time we wanted to add a new operator. This fact leaves our design Open to Modifications, which is terrible! OCP says that software entities should be open for extension but closed for modification.
+The reaffirmation of extending operands and respecting OCP is the tricky part. Defining new operators is simply manageable. however, the scanner class should know about newly defined operators, same as postfix evaluator and convertor classes. So they should be modified each time we wanted to add a new operator. This fact leaves our design Open for Modifications, which is terrible! OCP says that software entities should be open for extension but closed for modification. Therefore we need to alter our design.
+
+The solution is to take the logic of operators and dependencies out of the Scanner, Postfix converter, and Evaluator. Scanner needs to know about lexical form or symbol of the operators while Postfix converter should be aware of operators precedence, and finally, Evaluator should know the mathematical logic behind every operator. so any attempt to define an operator has to include these three factors. A simple unary operator is defined like:
+
+```c++
+class Cos final : public UnaryOperator
+{
+public:
+    //This is how the scanner will know about cos signature
+    static std::shared_ptr<Cos> checkAndCreate (QString& str)
+    {
+        return (str == "cos") ? std::make_shared<Cos>() : nullptr;
+    }
+    Cos()
+    {
+        _lexical_form = "cos";
+        
+        //This is how infix to postfix converter will know about this operator precedence
+        _precedence = OperatorPrecedence::Functions;
+    }
+    
+    //This is how Postfix evaluator conducts the math.
+    double evaluate(double operand) override
+    {
+        return std::cos(operand);
+    }
+};
+```
+
+It only remains one thing for us to do. How can scanner build an instance from the new operator? Easy! For building new operators we introduce an OpertarFactory class and we let it does the job for us. As C++ generally does not suppot reflection we have to add a pointer of new operators to its operator's list.
 
 #### How to extend program by adding a custom operator
+
+To create a unary operator, we need to extend this file with a new class respected to the new operator.
+
+**Phase.1 : Definition of the operator**
+
+The class signature for unary operators is like:
+```c++
+ class OperatorName final : public UnaryOperator
+ {
+ public:
+     static std::shared_ptr<OperatorName> checkAndCreate (QString& str)
+     {
+         return (str == "OperatorSymbol") ? std::make_shared<OperatorName>() : nullptr;
+     }
+     Sgn()
+     {
+         _lexical_form = "OperatorSymbol";
+         _precedence = OperatorPrecedence::One_Type_Of_Defined_Precedences;
+     }
+     double evaluate(double operand) override
+     {
+         double result;
+
+         //Implement operator's mathematical logic here,
+         //the way it affects the operand
+
+         return result;
+     }
+ };
+```
+Extending operators collection for BinaryOperators is almost the same, The only difference is that it inherits from BinaryOperator base class and also 'evaluate' function signature is:
+```c++
+ double evaluate(double left_operand, double right_operand) override
+```
+**Phase.2 :**
+
+We need to extend OperatorFactory class, so our newly built operator can be recognized and used in scanner. to do this, we need to append this line of code into 'create' function of the OperatorFactory class
+```c++
+operators_constructors.append((std::shared_ptr<Operator> (*)(const QString&)) (&OperatorName::checkAndCreate));
+```
 
 ## Source code explanation
 
