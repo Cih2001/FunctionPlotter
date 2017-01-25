@@ -188,6 +188,50 @@ operators_constructors.append((std::shared_ptr<Operator> (*)(const QString&)) (&
 
 ## Source code explanation
 
+After hitting draw button the code in below will be executed, which also explains how to use the all main components together.
+
+```c++
+//Initiating a new QT line serie.
+    QLineSeries* serie(new QLineSeries());
+    serie->setName(ui->leFunction->text());
+
+    //Makeing a list of variables, which includes only x
+    QPair<QString,double> x = {"x",0};
+    QList<QPair<QString,double>> variables_list = {x};
+
+    //Stage1: Tokenizing function definition.
+    Scanner scanner(ui->leFunction->text());
+    auto infix_expression = scanner.scan();
+
+    //Stage2: Convert function definition into a postfix notation
+    InfixToPostfix infix_to_postfix(infix_expression);
+    auto postfix_expression = infix_to_postfix.convert();
+
+    //Stage3: Evaluating the postfix_function for x in range [-30,+30]
+    FunctionEvaluator evaluator(postfix_expression);
+
+    for (double x = -30.0; x <= 30.0; x+=0.1)
+    {
+        variables_list[0].second = x;
+
+        double y = evaluator.evaluate(variables_list);
+        /* since the result of an arbitrary function can be limitlese and
+         * converge to infinity, it can deform our chart. so better to set
+         * some boundries.
+         */
+        if (y > 100) y = 100;
+        if (y < -100) y = -100;
+
+        serie->append(x,y);
+    }
+
+    //Update the chart.
+    chart->addSeries(serie);
+    chart->createDefaultAxes();
+    chartView->setChart(chart);
+```
+The algorithm of Scanner, converter and evaluator are clarified beforehand. the source code also contains comments so it should be clear.
+
 ## Improvements
 
 ### Improve the quality of the code
