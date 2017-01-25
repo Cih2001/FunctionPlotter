@@ -10,6 +10,11 @@ Scanner::~Scanner()
 
 const QString GENERAL_CHARS = " .ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+///
+/// \brief Checks to see if the entered string is a floating point number.
+/// \param str, possibly entered number
+/// \return
+///
 bool isNumber(QString str)
 {
     bool ok;
@@ -17,6 +22,10 @@ bool isNumber(QString str)
     return ok;
 }
 
+///
+/// \brief Scans the input string and returns the recognized tokens
+/// \return A list of tokens
+///
 Tokens Scanner::scan()
 {
     Tokens _tokens;

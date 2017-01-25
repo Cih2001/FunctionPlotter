@@ -1,6 +1,5 @@
 #ifndef INFIXTOPOSTFIX_H
 #define INFIXTOPOSTFIX_H
-#include <QString>
 #include <QList>
 #include "operators.h"
 #include <memory>
@@ -17,8 +16,6 @@ public:
         : _input_tokens(infix_tokens) {}
 
     Tokens convert();
-
-    QString toString();
 };
 
 #endif // INFIXTOPOSTFIX_H

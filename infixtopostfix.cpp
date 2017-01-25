@@ -62,9 +62,3 @@ Tokens InfixToPostfix::convert()
     }
     return result;
 }
-
-QString InfixToPostfix::toString()
-{
-    //TODO: Implementation
-    return "";
-}
