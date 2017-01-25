@@ -44,8 +44,9 @@ The extensive explanation can be found [here](http://interactivepython.org/runes
 3. Remove all parenthesis.
 
 For example, The converted version of A + B \* C (as it is illustrated below) is A B C \* +
-![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/moveright.png?raw=true "Infix to Postfix ad hoc method")
-
+<p align="center">
+<img src="http://interactivepython.org/runestone/static/pythonds/_images/moveright.png" />
+</p>
 But the algorithmic way to perform the conversion using the operators stack includes these steps:
 (Parsing tokens from start to end)
 
@@ -59,7 +60,9 @@ But the algorithmic way to perform the conversion using the operators stack incl
 6. If the input string is finished (all tokens are parsed) -> pop the remaining operators in the stack and add them to output.
 
 The figure below shows the steps of converting A \* B + C \* D into A B \* C D \* +
-![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/intopost.png?raw=true "Infix to Postfix using stack")
+<p align="center">
+<img src="http://interactivepython.org/runestone/static/pythonds/_images/intopost.png" />
+</p>
 
 #### Postfix Evaluation
 
@@ -73,7 +76,10 @@ A stack is again the data structure of choice. However, as you scan the postfix 
 4. The should be a sole result of the evaluation remained in the stack.
 
 The figure below shows the steps of evaluating 4 5 6 \* + ( which is  4 + 5 \* 6 = 34)
-![Fig.2](http://interactivepython.org/runestone/static/pythonds/_images/evalpostfix1.png?raw=true "Postfix Evaluation")
+
+<p align="center">
+<img src="http://interactivepython.org/runestone/static/pythonds/_images/evalpostfix1.png" />
+</p>
 
 ### The Design Patterns
 
